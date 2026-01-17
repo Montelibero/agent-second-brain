@@ -31,6 +31,7 @@ RUN uv sync --no-dev --no-install-project
 COPY . .
 
 ENV PYTHONPATH=/app/src
+ENV PATH="/root/.local/bin:/usr/bin:/usr/local/bin:/bin"
 
 # ---------- запуск ----------
 CMD ["uv", "run", "--no-project", "python", "-m", "d_brain"]
