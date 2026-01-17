@@ -1,0 +1,35 @@
+version: "3.9"
+
+x-dbrain-common: &dbrain-common
+  image: agent-second-brain:latest
+  environment:
+    TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+    DEEPGRAM_API_KEY: "${DEEPGRAM_API_KEY}"
+    TODOIST_API_KEY: "${TODOIST_API_KEY}"
+    ALLOWED_USER_IDS: "${ALLOWED_USER_IDS}"
+    VAULT_PATH: "/data/vault"
+  volumes:
+    - vault:/data/vault
+    - claude:/root/.config/claude
+    - git:/root/.config/git
+
+services:
+  bot:
+    <<: *dbrain-common
+    command: uv run --no-project python -m d_brain
+    restart: unless-stopped
+
+  process:
+    <<: *dbrain-common
+    command: uv run --no-project python -m d_brain process
+    restart: "no"
+
+  weekly:
+    <<: *dbrain-common
+    command: uv run --no-project python -m d_brain weekly
+    restart: "no"
+
+volumes:
+  vault:
+  claude:
+  git:
